@@ -11,6 +11,12 @@ position: relative;
 color: #FFFFFF;
 
 padding: 32px;
+
+.noFound{
+  color: #FFFFFF;
+  font-size: 16px;
+  margin: 0 auto;
+}
 `;
 
 export const Title = styled.div`

@@ -12,6 +12,12 @@ color: #FFFFFF;
 
 padding: 32px;
 
+.noFound{
+  color: #FFFFFF;
+  font-size: 16px;
+  margin: 0 auto;
+}
+
 .primary{
   background-color: #1DBBA5;
 

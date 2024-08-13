@@ -12,7 +12,12 @@ const Pacttos: React.FC = () => {
       </S.Title>
 
       <S.NotFound>No Pacttos found</S.NotFound>
-      <SearchInput />
+      <SearchInput
+        search={''}
+        handleChange={function (e: { target: { value: string } }): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
     </S.Main>
   );
 };
