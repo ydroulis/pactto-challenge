@@ -11,23 +11,6 @@ import Popup from '../components/Popup';
 import CheckInput from './components/CheckInput';
 import { useSettingsContext } from '../contexts/settingsContext';
 
-// const initialSlider = 3;
-// const initialColor = {
-//   color1: '#008000',
-//   color2: '#FF0000',
-//   color3: '#000000',
-//   color4: '#000000',
-// };
-// const initialChecked = {
-//   logo: false,
-//   microphone: true,
-//   camera: true,
-//   muted: true,
-//   notes: false,
-//   zoom: true,
-//   swipe: false,
-// };
-
 const ReviewSettings: React.FC = () => {
   const { checked, color, setChecked, setColor, setSlider, slider } =
     useSettingsContext();

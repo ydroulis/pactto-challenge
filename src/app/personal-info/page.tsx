@@ -11,8 +11,6 @@ const PersonalInfo: React.FC = () => {
   const {
     formValues,
     setFormValues,
-    isSaved,
-    setIsSaved,
     selectValue,
     setSelectValue,
     formErrors,
@@ -23,6 +21,7 @@ const PersonalInfo: React.FC = () => {
   const [localFormValues, setLocalFormValues] = useState(formValues);
   const [localSelectValue, setLocalSelectValue] = useState(selectValue);
   const [localCheckedValue, setLocalCheckedValue] = useState(checked);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     setLocalFormValues(formValues);

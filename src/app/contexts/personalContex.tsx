@@ -15,8 +15,6 @@ import { z } from 'zod';
 type FormValues = z.infer<typeof FormSchema>;
 
 interface IPersonalContextProps {
-  isSaved: boolean;
-  setIsSaved: Dispatch<SetStateAction<boolean>>;
   formValues: {
     name: string;
     secondName: string;
@@ -74,7 +72,6 @@ export function PersonalContextProvider({ children }: { children: ReactNode }) {
     user: 'ydroulis',
     other: '',
   });
-  const [isSaved, setIsSaved] = useState(false);
   const [selectValue, setSelectValue] = useState('Brazil');
   const [checked, setChecked] = useState({
     video: false,
@@ -90,24 +87,20 @@ export function PersonalContextProvider({ children }: { children: ReactNode }) {
       checked,
       formErrors,
       formValues,
-      isSaved,
       selectValue,
       setChecked,
       setFormErrors,
       setFormValues,
-      setIsSaved,
       setSelectValue,
     }),
     [
       checked,
       formErrors,
       formValues,
-      isSaved,
       selectValue,
       setChecked,
       setFormErrors,
       setFormValues,
-      setIsSaved,
       setSelectValue,
     ],
   );
