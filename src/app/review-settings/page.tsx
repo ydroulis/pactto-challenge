@@ -9,56 +9,65 @@ import Image from 'next/image';
 import LogoImage from '../assets/images/logo.png';
 import Popup from '../components/Popup';
 import CheckInput from './components/CheckInput';
+import { useSettingsContext } from '../contexts/settingsContext';
 
-const initialSlider = 3;
-const initialColor = {
-  color1: '#008000',
-  color2: '#FF0000',
-  color3: '#000000',
-  color4: '#000000',
-};
-const initialChecked = {
-  logo: false,
-  microphone: true,
-  camera: true,
-  muted: true,
-  notes: false,
-  zoom: true,
-  swipe: false,
-};
+// const initialSlider = 3;
+// const initialColor = {
+//   color1: '#008000',
+//   color2: '#FF0000',
+//   color3: '#000000',
+//   color4: '#000000',
+// };
+// const initialChecked = {
+//   logo: false,
+//   microphone: true,
+//   camera: true,
+//   muted: true,
+//   notes: false,
+//   zoom: true,
+//   swipe: false,
+// };
 
 const ReviewSettings: React.FC = () => {
+  const { checked, color, setChecked, setColor, setSlider, slider } =
+    useSettingsContext();
   const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [isSaved, setIsSaved] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [slider, setSlider] = useState<number | number[]>(initialSlider);
-  const [color, setColor] = useState(initialColor);
-  const [checked, setChecked] = useState(initialChecked);
+  const [sliderLocal, setSliderLocal] = useState<number | number[]>(slider);
+  const [colorLocal, setColorLocal] = useState(color);
+  const [checkedLocal, setCheckedLocal] = useState(checked);
 
   useEffect(() => {
-    const sliderEqual = slider === initialSlider;
+    const sliderEqual = slider === sliderLocal;
     const colorEqual =
-      color.color1 === initialColor.color1 &&
-      color.color2 === initialColor.color2 &&
-      color.color3 === initialColor.color3 &&
-      color.color4 === initialColor.color4;
+      color.color1 === colorLocal.color1 &&
+      color.color2 === colorLocal.color2 &&
+      color.color3 === colorLocal.color3 &&
+      color.color4 === colorLocal.color4;
     const checkedEqual =
-      checked.camera === initialChecked.camera &&
-      checked.logo === initialChecked.logo &&
-      checked.microphone === initialChecked.microphone &&
-      checked.muted === initialChecked.muted &&
-      checked.notes === initialChecked.notes &&
-      checked.swipe === initialChecked.swipe &&
-      checked.zoom === initialChecked.zoom;
+      checked.camera === checkedLocal.camera &&
+      checked.logo === checkedLocal.logo &&
+      checked.microphone === checkedLocal.microphone &&
+      checked.muted === checkedLocal.muted &&
+      checked.notes === checkedLocal.notes &&
+      checked.swipe === checkedLocal.swipe &&
+      checked.zoom === checkedLocal.zoom;
 
     setIsDisabled(sliderEqual && colorEqual && checkedEqual);
-  }, [slider, color, checked]);
+  }, [sliderLocal, colorLocal, checkedLocal]);
+
+  useEffect(() => {
+    setColorLocal(color);
+    setSliderLocal(slider);
+    setCheckedLocal(checked);
+  }, [color, slider, checked]);
 
   const handleCheckedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputName = e.target.name;
     const value = e.target.checked;
 
-    setChecked((prevchecked) => ({
+    setCheckedLocal((prevchecked) => ({
       ...prevchecked,
       [inputName]: value,
     }));
@@ -67,7 +76,7 @@ const ReviewSettings: React.FC = () => {
   const handleColorChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
-      setColor((prevColor) => ({
+      setColorLocal((prevColor) => ({
         ...prevColor,
         [name]: value,
       }));
@@ -81,10 +90,19 @@ const ReviewSettings: React.FC = () => {
 
   const handleSave = () => {
     setIsSaved(true);
+    setColor(colorLocal);
+    setSlider(sliderLocal);
+    setChecked(checkedLocal);
 
     setTimeout(() => {
       setIsSaved(false);
     }, 5000);
+  };
+
+  const handleReset = () => {
+    setColorLocal(color);
+    setSliderLocal(slider);
+    setCheckedLocal(checked);
   };
 
   return (
@@ -93,27 +111,7 @@ const ReviewSettings: React.FC = () => {
         <S.Actions>
           <h1>Review Settings</h1>
           <S.Buttons>
-            <S.Button
-              className="secondary"
-              onClick={() => {
-                setChecked({
-                  logo: false,
-                  microphone: true,
-                  camera: true,
-                  muted: true,
-                  notes: false,
-                  zoom: true,
-                  swipe: false,
-                });
-                setColor({
-                  color1: '#008000',
-                  color2: '#FF0000',
-                  color3: '#000000',
-                  color4: '#000000',
-                });
-                setSlider(3);
-              }}
-            >
+            <S.Button className="secondary" onClick={handleReset}>
               Reset Changes
             </S.Button>
             <S.Button
@@ -127,7 +125,7 @@ const ReviewSettings: React.FC = () => {
         </S.Actions>
         <S.Content>
           <CheckInput
-            checked={checked}
+            checked={checkedLocal}
             handleCheckedChange={handleCheckedChange}
           />
 
@@ -137,12 +135,12 @@ const ReviewSettings: React.FC = () => {
               <Slider
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
-                value={slider}
+                value={sliderLocal}
                 step={1}
                 min={1}
                 max={7}
                 onChange={(event, newValue) => {
-                  setSlider(newValue);
+                  setSliderLocal(newValue);
                 }}
                 name="slider"
               />
@@ -156,28 +154,28 @@ const ReviewSettings: React.FC = () => {
                 id="1"
                 label="Color 1"
                 name="color1"
-                value={color.color1}
+                value={colorLocal.color1}
                 onChange={handleColorChange}
               />
               <InputColor
                 id="2"
                 label="Color 2"
                 name="color2"
-                value={color.color2}
+                value={colorLocal.color2}
                 onChange={handleColorChange}
               />
               <InputColor
                 id="3"
                 label="Color 3"
                 name="color3"
-                value={color.color3}
+                value={colorLocal.color3}
                 onChange={handleColorChange}
               />
               <InputColor
                 id="4"
                 label="Color 4"
                 name="color4"
-                value={color.color4}
+                value={colorLocal.color4}
                 onChange={handleColorChange}
               />
             </S.Inputs>

@@ -3,6 +3,7 @@ import { Roboto } from 'next/font/google';
 import './globals.css';
 import { Metadata } from 'next';
 import { PersonalContextProvider } from './contexts/personalContex';
+import { SettingsContextProvider } from './contexts/settingsContext';
 
 export const metadata: Metadata = {
   title: 'Pactto',
@@ -23,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <PersonalContextProvider>
-        <body className={roboto.className}>
-          <Sidebar />
-          {children}
-        </body>
+        <SettingsContextProvider>
+          <body className={roboto.className}>
+            <Sidebar />
+            {children}
+          </body>
+        </SettingsContextProvider>
       </PersonalContextProvider>
     </html>
   );
