@@ -1,39 +1,71 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './styles';
 import { z } from 'zod';
 import { FormSchema } from './components/FormSection/schema';
 import FormSection from './components/FormSection';
 import Link from 'next/link';
 import Popup from '../components/Popup';
+import { usePersonalContext } from '../contexts/personalContex';
 
-type FormValues = z.infer<typeof FormSchema>;
+// type FormValues = z.infer<typeof FormSchema>;
 
 const PersonalInfo: React.FC = () => {
-  const [formErrors, setFormErrors] = useState<
-    Partial<Record<keyof FormValues, string>>
-  >({});
-  const [formValues, setFormValues] = useState<FormValues>({
-    name: 'Yuri',
-    secondName: 'Lombardi Androulis',
-    email: 'lombardi.droulis@gmail.com',
-    user: 'ydroulis',
-    other: '',
-  });
-  const [isSaved, setIsSaved] = useState(false);
-  const [selectValue, setSelectValue] = useState('Brazil');
-  const [checked, setChecked] = React.useState({
-    video: false,
-    design: false,
-    development: true,
-    inspections: false,
-    medical: false,
-    sports: false,
-  });
+  const {
+    formValues,
+    setFormValues,
+    isSaved,
+    setIsSaved,
+    selectValue,
+    setSelectValue,
+    formErrors,
+    setChecked,
+    checked,
+    setFormErrors,
+  } = usePersonalContext();
+  const [localFormValues, setLocalFormValues] = useState(formValues);
+  const [localSelectValue, setLocalSelectValue] = useState(selectValue);
+  const [localCheckedValue, setLocalCheckedValue] = useState(checked);
+
+  // const [formErrors, setFormErrors] = useState<
+  //   Partial<Record<keyof FormValues, string>>
+  // >({});
+  // const [formValues, setFormValues] = useState<FormValues>({
+  //   name: 'Yuri',
+  //   secondName: 'Lombardi Androulis',
+  //   email: 'lombardi.droulis@gmail.com',
+  //   user: 'ydroulis',
+  //   other: '',
+  // });
+  // const [isSaved, setIsSaved] = useState(false);
+  // const [selectValue, setSelectValue] = useState('Brazil');
+  // const [checked, setChecked] = React.useState({
+  //   video: false,
+  //   design: false,
+  //   development: true,
+  //   inspections: false,
+  //   medical: false,
+  //   sports: false,
+  // });
+
+  useEffect(() => {
+    setLocalFormValues(formValues);
+    setLocalSelectValue(selectValue);
+    setLocalCheckedValue(checked);
+  }, [formValues, selectValue, checked]);
+
+  const handleReset = () => {
+    setLocalFormValues(formValues);
+    setLocalSelectValue(selectValue);
+    setLocalCheckedValue(checked);
+  };
 
   const handleSave = () => {
     setIsSaved(true);
+    setFormValues(localFormValues);
+    setSelectValue(localSelectValue);
+    setChecked(localCheckedValue);
 
     setTimeout(() => {
       setIsSaved(false);
@@ -44,28 +76,7 @@ const PersonalInfo: React.FC = () => {
     <>
       <S.Main>
         <S.Actions>
-          <S.Button
-            className="secondary"
-            onClick={() => {
-              setFormErrors({});
-              setSelectValue('Brazil');
-              setFormValues({
-                name: 'Yuri',
-                secondName: 'Lombardi Androulis',
-                email: 'lombardi.droulis@gmail.com',
-                user: 'ydroulis',
-                other: '',
-              });
-              setChecked({
-                video: false,
-                design: false,
-                development: true,
-                inspections: false,
-                medical: false,
-                sports: false,
-              });
-            }}
-          >
+          <S.Button className="secondary" onClick={handleReset}>
             Reset Changes
           </S.Button>
           <S.Button className="primary" onClick={() => handleSave()}>
@@ -80,13 +91,13 @@ const PersonalInfo: React.FC = () => {
 
         <FormSection
           formErrors={formErrors}
-          formValues={formValues}
+          formValues={localFormValues}
           setFormErrors={setFormErrors}
-          setFormValues={setFormValues}
-          selectValue={selectValue}
-          setSelectValue={setSelectValue}
-          checked={checked}
-          setChecked={setChecked}
+          setFormValues={setLocalFormValues}
+          selectValue={localSelectValue}
+          setSelectValue={setLocalSelectValue}
+          checked={localCheckedValue}
+          setChecked={setLocalCheckedValue}
         />
 
         <S.DeleteAccount>

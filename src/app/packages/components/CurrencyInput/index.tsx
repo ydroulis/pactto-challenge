@@ -41,8 +41,9 @@ const CurrencyInput: React.FC<ICurrencyInput> = ({
                 $isOpen={isSelectOpen}
                 className={selected}
                 onClick={() => handleCLick(option)}
+                key={i}
               >
-                <p key={i}>{option}</p>
+                <p>{option}</p>
 
                 {isSelectedItem && <CheckIcon className="check" />}
               </S.Item>

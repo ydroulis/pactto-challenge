@@ -2,6 +2,7 @@ import Sidebar from './components/Sidebar';
 import { Roboto } from 'next/font/google';
 import './globals.css';
 import { Metadata } from 'next';
+import { PersonalContextProvider } from './contexts/personalContex';
 
 export const metadata: Metadata = {
   title: 'Pactto',
@@ -21,10 +22,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
-        <Sidebar />
-        {children}
-      </body>
+      <PersonalContextProvider>
+        <body className={roboto.className}>
+          <Sidebar />
+          {children}
+        </body>
+      </PersonalContextProvider>
     </html>
   );
 }

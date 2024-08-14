@@ -32,9 +32,10 @@ const InputRadio: React.FC<IInputRadioProps> = ({
         onChange={handleChange}
         sx={selectedOptionsGroup.style}
       >
-        {selectedOptionsGroup.options.map((option) => {
+        {selectedOptionsGroup.options.map((option, i) => {
           return option.style ? (
             <FormControlLabel
+              key={i}
               disabled={option.disabled}
               className={option.className}
               style={option.style}
