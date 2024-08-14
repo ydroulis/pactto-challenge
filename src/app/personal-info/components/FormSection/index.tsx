@@ -15,6 +15,7 @@ interface IFormSectionProps {
     secondName: string;
     email: string;
     user: string;
+    other: string;
   };
   setFormValues: Dispatch<
     SetStateAction<{
@@ -22,6 +23,7 @@ interface IFormSectionProps {
       secondName: string;
       email: string;
       user: string;
+      other: string;
     }>
   >;
   setFormErrors: Dispatch<
@@ -122,7 +124,12 @@ const FormSection: React.FC<IFormSectionProps> = ({
         setSelectValue={setSelectValue}
       />
 
-      <MainActivitySection setChecked={setChecked} checked={checked} />
+      <MainActivitySection
+        formValues={formValues}
+        handleChange={handleChange}
+        setChecked={setChecked}
+        checked={checked}
+      />
 
       <S.UserPassword>
         <p>User handle and password</p>

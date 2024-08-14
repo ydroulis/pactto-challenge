@@ -19,6 +19,7 @@ const PersonalInfo: React.FC = () => {
     secondName: 'Lombardi Androulis',
     email: 'lombardi.droulis@gmail.com',
     user: 'ydroulis',
+    other: '',
   });
   const [isSaved, setIsSaved] = useState(false);
   const [selectValue, setSelectValue] = useState('Brazil');
@@ -53,6 +54,7 @@ const PersonalInfo: React.FC = () => {
                 secondName: 'Lombardi Androulis',
                 email: 'lombardi.droulis@gmail.com',
                 user: 'ydroulis',
+                other: '',
               });
               setChecked({
                 video: false,

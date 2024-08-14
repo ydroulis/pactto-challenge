@@ -29,13 +29,22 @@ interface IMainActivitySectionProps {
       sports: boolean;
     }>
   >;
+  formValues: {
+    name: string;
+    secondName: string;
+    email: string;
+    user: string;
+    other: string;
+  };
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const MainActivitySection: React.FC<IMainActivitySectionProps> = ({
   checked,
   setChecked,
+  handleChange,
+  formValues,
 }) => {
-  console.log('🚀 ~ checked:', checked);
   const BpIcon = styled('span')(() => ({
     borderRadius: 2,
     width: 16,
@@ -165,7 +174,13 @@ const MainActivitySection: React.FC<IMainActivitySectionProps> = ({
       </S.Container>
 
       <S.InputContainer>
-        <S.Input type="text" placeholder="Other" name="other" />
+        <S.Input
+          type="text"
+          placeholder="Other"
+          name="other"
+          value={formValues.other}
+          onChange={handleChange}
+        />
       </S.InputContainer>
     </S.MainActivity>
   );

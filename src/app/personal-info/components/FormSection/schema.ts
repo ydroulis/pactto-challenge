@@ -5,4 +5,5 @@ export const FormSchema = z.object({
   secondName: z.string().min(1, 'Second name is required'),
   email: z.string().email('Email invalid'),
   user: z.string().min(1, 'User name is required'),
+  other: z.string(),
 });
