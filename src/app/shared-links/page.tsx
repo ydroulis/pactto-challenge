@@ -6,43 +6,62 @@ import SearchInput from '../components/SearchInput';
 import Loading from '../components/Loading';
 
 const SharedLinks: React.FC = () => {
-  const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [noResults, setNoResults] = useState(false);
+  const [searchPublic, setSearchPublic] = useState('');
+  const [loadingPublic, setLoadingPublic] = useState(false);
+  const [noResultsPublic, setNoResultsPublic] = useState(false);
+  const [searchPrivate, setSearchPrivate] = useState('');
+  const [loadingPrivate, setLoadingPrivate] = useState(false);
+  const [noResultsPrivate, setNoResultsPrivate] = useState(false);
 
-  const handleChange = (e: { target: { value: string } }) => {
+  const handleChangePublic = (e: { target: { value: string } }) => {
     const newSearchValue = e.target.value;
-    setSearch(newSearchValue);
+    setSearchPublic(newSearchValue);
 
-    setLoading(true);
-    setNoResults(false);
+    setLoadingPublic(true);
+    setNoResultsPublic(false);
 
     setTimeout(() => {
-      setLoading(false);
-      setNoResults(true);
+      setLoadingPublic(false);
+      setNoResultsPublic(true);
+    }, 1000);
+  };
+
+  const handleChangePrivate = (e: { target: { value: string } }) => {
+    const newSearchValue = e.target.value;
+    setSearchPrivate(newSearchValue);
+
+    setLoadingPrivate(true);
+    setNoResultsPrivate(false);
+
+    setTimeout(() => {
+      setLoadingPrivate(false);
+      setNoResultsPrivate(true);
     }, 1000);
   };
 
   return (
     <S.Main>
-      <div>
+      <div className="search">
         <S.Title>
           <h1>There are no public web links you created</h1>
         </S.Title>
 
-        <SearchInput search={search} handleChange={handleChange} />
-        {loading && <Loading />}
-        {noResults && <p className="noFound">No videos found</p>}
+        <SearchInput search={searchPublic} handleChange={handleChangePublic} />
+        {loadingPublic && <Loading />}
+        {noResultsPublic && <p className="noFound">No videos found</p>}
       </div>
 
-      <div>
+      <div className="search">
         <S.Title>
           <h1>There are no private web links you created</h1>
         </S.Title>
 
-        <SearchInput search={search} handleChange={handleChange} />
-        {loading && <Loading />}
-        {noResults && <p className="noFound">No videos found</p>}
+        <SearchInput
+          search={searchPrivate}
+          handleChange={handleChangePrivate}
+        />
+        {loadingPrivate && <Loading />}
+        {noResultsPrivate && <p className="noFound">No videos found</p>}
       </div>
     </S.Main>
   );

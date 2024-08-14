@@ -165,7 +165,7 @@ const MainActivitySection: React.FC<IMainActivitySectionProps> = ({
       </S.Container>
 
       <S.InputContainer>
-        <S.Input type="text" placeholder="Other" />
+        <S.Input type="text" placeholder="Other" name="other" />
       </S.InputContainer>
     </S.MainActivity>
   );

@@ -5,6 +5,7 @@ width: 100%;
 
 display: flex;
 flex-direction: column;
+justify-content: center;
 gap: 75.440px;
 
 position: relative;
@@ -13,7 +14,15 @@ color: #FFFFFF;
 
 padding: 32px;
 
-.noFound{
+.search{
+width: 100%;
+
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+ .noFound{
   color: #FFFFFF;
   font-size: 16px;
   margin: 0 auto;

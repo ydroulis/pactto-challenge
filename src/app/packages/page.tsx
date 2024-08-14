@@ -151,8 +151,8 @@ const Packages: React.FC = () => {
       </S.Main>
 
       <Modal
-        closeAction={() => setIsDeleteOpen(false)}
-        buttonAction={handleDelete}
+        closeAction={handleDelete}
+        buttonAction={() => setIsDeleteOpen(false)}
         isOpen={isDeleteOpen}
         width="400px"
         primaryBtn="Yes"
