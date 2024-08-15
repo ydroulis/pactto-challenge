@@ -9,6 +9,7 @@ import AddItemOnEnter from './components/AddItemOnEnter';
 import { z } from 'zod';
 import Popup from '../components/Popup';
 import Link from 'next/link';
+import { useProfileContext } from '../contexts/profileContext';
 
 const enterInitial = {
   expertise: ['Expertise 1'],
@@ -41,19 +42,27 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>;
 
-const profile: React.FC = () => {
+const Profile: React.FC = () => {
+  const {
+    areaContent,
+    enterInput,
+    formValues,
+    setAreaContent,
+    setEnterInput,
+    setFormValues,
+  } = useProfileContext();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [noChanges, setNoChanges] = useState(true);
-  const [enterInput, setEnterInput] = useState({
+  const [enterInputLocal, setEnterInputLocal] = useState({
     expertise: ['Expertise 1'],
     award: ['Award'],
     follow: ['www.pactto.com'],
   });
-  const [areaContent, setAreaContent] = useState({
+  const [areaContentLocal, setAreaContentLocal] = useState({
     footer: '',
     aboutMe: '',
   });
-  const [formValues, setFormValues] = useState({
+  const [formValuesLocal, setFormValuesLocal] = useState({
     publicName: 'Yuri Lombardi Androulis',
     headline: '',
     expertises: '',
@@ -66,23 +75,37 @@ const profile: React.FC = () => {
   >({});
 
   useEffect(() => {
+    setFormValuesLocal(formValues);
+    setAreaContentLocal(areaContent);
+    setEnterInputLocal(enterInput);
+  }, [formValues, areaContent, enterInput]);
+
+  useEffect(() => {
     const formsEqual =
-      formValuesInitial.publicName === formValues.publicName &&
-      formValuesInitial.headline === formValues.headline &&
-      formValuesInitial.expertises === formValues.expertises &&
-      formValuesInitial.awards === formValues.awards &&
-      formValuesInitial.youtube === formValues.youtube &&
-      formValuesInitial.author === formValues.author;
+      formValuesLocal.publicName === formValues.publicName &&
+      formValuesLocal.headline === formValues.headline &&
+      formValuesLocal.expertises === formValues.expertises &&
+      formValuesLocal.awards === formValues.awards &&
+      formValuesLocal.youtube === formValues.youtube &&
+      formValuesLocal.author === formValues.author;
 
     const areaEqual =
-      areaInitial.aboutMe === areaContent.aboutMe &&
-      areaInitial.footer === areaContent.footer;
+      areaContentLocal.aboutMe === areaContent.aboutMe &&
+      areaContentLocal.footer === areaContent.footer;
 
     const enterEqual =
-      JSON.stringify(enterInitial) === JSON.stringify(enterInput);
+      JSON.stringify(enterInputLocal) === JSON.stringify(enterInput);
+    console.log('🚀 ~ useEffect ~ areaEqual:', enterEqual);
 
     setNoChanges(formsEqual && areaEqual && enterEqual);
-  }, [formValues, areaContent, enterInput]);
+  }, [
+    formValues,
+    areaContent,
+    enterInput,
+    formValuesLocal,
+    areaContentLocal,
+    enterInputLocal,
+  ]);
 
   const savedDisabled = noChanges;
 
@@ -90,7 +113,7 @@ const profile: React.FC = () => {
     const areaValue = event.target.value;
     const areaName = event.target.name;
 
-    setAreaContent({
+    setAreaContentLocal({
       ...areaContent,
       [areaName]: areaValue,
     });
@@ -100,7 +123,7 @@ const profile: React.FC = () => {
     const inputName = e.target.name;
     const inputValue = e.target.value;
 
-    setFormValues({
+    setFormValuesLocal({
       ...formValues,
       [inputName]: inputValue,
     });
@@ -129,7 +152,7 @@ const profile: React.FC = () => {
     inputName: 'expertise' | 'award' | 'follow' | undefined,
   ) => {
     inputName &&
-      setEnterInput((prevState) => ({
+      setEnterInputLocal((prevState) => ({
         ...prevState,
         [inputName]: [...prevState[inputName], inputValue],
       }));
@@ -140,7 +163,7 @@ const profile: React.FC = () => {
     inputName: 'expertise' | 'award' | 'follow' | undefined,
   ) => {
     inputName &&
-      setEnterInput((prevState) => ({
+      setEnterInputLocal((prevState) => ({
         ...prevState,
         [inputName]: prevState[inputName].filter(
           (_, index) => index !== indexToRemove,
@@ -148,8 +171,11 @@ const profile: React.FC = () => {
       }));
   };
 
-  const handlePopup = () => {
+  const handleSave = () => {
     setIsPopupOpen(true);
+    setFormValues(formValuesLocal);
+    setAreaContent(areaContentLocal);
+    setEnterInput(enterInputLocal);
 
     setTimeout(() => {
       setIsPopupOpen(false);
@@ -168,7 +194,7 @@ const profile: React.FC = () => {
             <S.Button
               disabled={savedDisabled}
               className="primary"
-              onClick={() => handlePopup()}
+              onClick={() => handleSave()}
             >
               Save
             </S.Button>
@@ -185,7 +211,7 @@ const profile: React.FC = () => {
                     name="publicName"
                     placeholder="Public name"
                     onChange={(e) => handleChange(e)}
-                    value={formValues.publicName}
+                    value={formValuesLocal.publicName}
                   />
                   <span className="error">
                     {formErrors.publicName && formErrors.publicName}
@@ -196,14 +222,14 @@ const profile: React.FC = () => {
                   name="headline"
                   placeholder="Headline"
                   onChange={(e) => handleChange(e)}
-                  value={formValues.headline}
+                  value={formValuesLocal.headline}
                 />
               </S.Field>
               <S.Field>
                 <p>About Me</p>
                 <S.TextareaInput
                   onChange={(e) => handleAreaChange(e)}
-                  value={areaContent.aboutMe}
+                  value={areaContentLocal.aboutMe}
                   name="aboutMe"
                   rows={8}
                   placeholder="About Me"
@@ -214,14 +240,14 @@ const profile: React.FC = () => {
                   name="expertises"
                   placeholder="Expertise Title"
                   onChange={(e) => handleChange(e)}
-                  value={formValues.expertises}
+                  value={formValuesLocal.expertises}
                 />
               </S.Field>
 
               <AddItemOnEnter
                 name="expertise"
                 placeholder='Add expertise and hit "Enter"'
-                initialState={enterInput.expertise}
+                initialState={enterInputLocal.expertise}
                 onAdd={handleAddOnEnter}
                 onRemove={handleRemoveOnEnter}
               />
@@ -231,7 +257,7 @@ const profile: React.FC = () => {
                   name="awards"
                   placeholder="Awards Title"
                   onChange={(e) => handleChange(e)}
-                  value={formValues.awards}
+                  value={formValuesLocal.awards}
                 />
               </S.Field>
 
@@ -260,7 +286,7 @@ const profile: React.FC = () => {
                   name="youtube"
                   placeholder="YouTube video URL"
                   onChange={(e) => handleChange(e)}
-                  value={formValues.youtube}
+                  value={formValuesLocal.youtube}
                 />
               </S.Field>
 
@@ -271,14 +297,14 @@ const profile: React.FC = () => {
                   rows={5}
                   placeholder="Quote"
                   onChange={(e) => handleAreaChange(e)}
-                  value={areaContent.footer}
+                  value={areaContentLocal.footer}
                 />
               </S.Field>
               <S.TextInput
                 name="author"
                 placeholder="Quote Author"
                 onChange={(e) => handleChange(e)}
-                value={formValues.author}
+                value={formValuesLocal.author}
               />
             </S.Form>
           </S.Column>
@@ -310,4 +336,4 @@ const profile: React.FC = () => {
   );
 };
 
-export default profile;
+export default Profile;

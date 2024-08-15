@@ -12,8 +12,6 @@ import {
 import { FormSchema } from '../personal-info/components/FormSection/schema';
 import { z } from 'zod';
 
-type FormValues = z.infer<typeof FormSchema>;
-
 interface IPersonalContextProps {
   formValues: {
     name: string;
@@ -31,10 +29,6 @@ interface IPersonalContextProps {
       other: string;
     }>
   >;
-  setFormErrors: Dispatch<
-    SetStateAction<Partial<Record<keyof FormValues, string>>>
-  >;
-  formErrors: Partial<Record<keyof FormValues, string>>;
   selectValue: string;
   setSelectValue: Dispatch<SetStateAction<string>>;
   checked: {
@@ -57,14 +51,13 @@ interface IPersonalContextProps {
   >;
 }
 
+type FormValues = z.infer<typeof FormSchema>;
+
 const PersonalContext = createContext<IPersonalContextProps | undefined>(
   undefined,
 );
 
 export function PersonalContextProvider({ children }: { children: ReactNode }) {
-  const [formErrors, setFormErrors] = useState<
-    Partial<Record<keyof FormValues, string>>
-  >({});
   const [formValues, setFormValues] = useState<FormValues>({
     name: 'Yuri',
     secondName: 'Lombardi Androulis',
@@ -85,21 +78,17 @@ export function PersonalContextProvider({ children }: { children: ReactNode }) {
   const contextValue = useMemo(
     () => ({
       checked,
-      formErrors,
       formValues,
       selectValue,
       setChecked,
-      setFormErrors,
       setFormValues,
       setSelectValue,
     }),
     [
       checked,
-      formErrors,
       formValues,
       selectValue,
       setChecked,
-      setFormErrors,
       setFormValues,
       setSelectValue,
     ],

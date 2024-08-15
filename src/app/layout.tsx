@@ -4,6 +4,7 @@ import './globals.css';
 import { Metadata } from 'next';
 import { PersonalContextProvider } from './contexts/personalContex';
 import { SettingsContextProvider } from './contexts/settingsContext';
+import { ProfileContextProvider } from './contexts/profileContext';
 
 export const metadata: Metadata = {
   title: 'Pactto',
@@ -25,10 +26,12 @@ export default function RootLayout({
     <html lang="en">
       <PersonalContextProvider>
         <SettingsContextProvider>
-          <body className={roboto.className}>
-            <Sidebar />
-            {children}
-          </body>
+          <ProfileContextProvider>
+            <body className={roboto.className}>
+              <Sidebar />
+              {children}
+            </body>
+          </ProfileContextProvider>
         </SettingsContextProvider>
       </PersonalContextProvider>
     </html>

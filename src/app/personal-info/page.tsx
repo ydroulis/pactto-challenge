@@ -6,6 +6,10 @@ import FormSection from './components/FormSection';
 import Link from 'next/link';
 import Popup from '../components/Popup';
 import { usePersonalContext } from '../contexts/personalContex';
+import { FormSchema } from '../personal-info/components/FormSection/schema';
+import { z } from 'zod';
+
+type FormValues = z.infer<typeof FormSchema>;
 
 const PersonalInfo: React.FC = () => {
   const {
@@ -13,15 +17,16 @@ const PersonalInfo: React.FC = () => {
     setFormValues,
     selectValue,
     setSelectValue,
-    formErrors,
     setChecked,
     checked,
-    setFormErrors,
   } = usePersonalContext();
   const [localFormValues, setLocalFormValues] = useState(formValues);
   const [localSelectValue, setLocalSelectValue] = useState(selectValue);
   const [localCheckedValue, setLocalCheckedValue] = useState(checked);
   const [isSaved, setIsSaved] = useState(false);
+  const [formErrors, setFormErrors] = useState<
+    Partial<Record<keyof FormValues, string>>
+  >({});
 
   useEffect(() => {
     setLocalFormValues(formValues);
@@ -30,6 +35,7 @@ const PersonalInfo: React.FC = () => {
   }, [formValues, selectValue, checked]);
 
   const handleReset = () => {
+    setFormErrors({});
     setLocalFormValues(formValues);
     setLocalSelectValue(selectValue);
     setLocalCheckedValue(checked);
